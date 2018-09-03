@@ -1,8 +1,8 @@
 using System;
 
-namespace rock_app
+namespace rock_app.Models
 {
-    class Song
+    public class Song
     {
         public Guid SongId { get; set; }
         public string Name { get; set; }
@@ -17,7 +17,7 @@ namespace rock_app
         
         public Guid GenreId { get; set; }
         public Genre Genre { get; set; }
-        
+
         public Guid AlbumId { get; set; }
         public Album Album { get; set; }
     }

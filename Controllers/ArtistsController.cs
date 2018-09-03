@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using rock_app.Models;
+using rock_app.Services;
 
 namespace rock_app.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class ArtistController : Controller
     {
+        private readonly IArtistService _artistService;
+
+        public ArtistController(IArtistService artistService)
+        {
+            _artistService = artistService;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        public async Task<IEnumerable<Artist>> Get() => await _artistService.GetArtistsAsync();
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        public Task<Artist> Get(Guid id) => _artistService.GetArtistAsync(id);
 
         // POST api/values
         [HttpPost]
