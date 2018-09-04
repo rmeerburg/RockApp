@@ -11,6 +11,9 @@ namespace rock_app.Models
         }
 
         public Guid AlbumId { get; set; }
+
+        public Guid ArtistId { get; set; }
+        public Artist Artist { get; set; }
         public string Name { get; set; }
         public ICollection<Song> Songs { get; set; }
     }

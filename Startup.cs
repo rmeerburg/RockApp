@@ -26,7 +26,7 @@ namespace rock_app
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IArtistService, ArtistService>();
-
+            services.AddTransient<IDataSeedService, DataSeedService>();
 
             services.AddMvc()
                 .AddJsonOptions(options =>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rock_app;
 
 namespace rock_app.Migrations
 {
     [DbContext(typeof(RockAppContext))]
-    partial class RockAppContextModelSnapshot : ModelSnapshot
+    [Migration("20180904205727_AlbumArtistBpmNull")]
+    partial class AlbumArtistBpmNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,7 +66,7 @@ namespace rock_app.Migrations
                     b.Property<Guid>("SongId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("AlbumId");
+                    b.Property<Guid>("AlbumId");
 
                     b.Property<Guid>("ArtistId");
 
@@ -105,7 +107,8 @@ namespace rock_app.Migrations
                 {
                     b.HasOne("rock_app.Models.Album", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("AlbumId");
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("rock_app.Models.Artist", "Artist")
                         .WithMany()

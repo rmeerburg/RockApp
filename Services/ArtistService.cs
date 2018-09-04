@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using rock_app.Models;
 
 namespace rock_app.Services
@@ -15,33 +16,36 @@ namespace rock_app.Services
         {
             _context = context;
         }
-        public async Task<IEnumerable<Artist>> GetArtistsAsync() => _context.Artists;
+        public async Task<IEnumerable<Artist>> GetArtistsAsync() => _context.Artists.Include(a => a.Albums);
 
-        public Task CreateArtistAsync(Artist artist)
+        public async Task<Artist> CreateArtistAsync(Artist artist)
         {
-            throw new NotImplementedException();
+            await _context.Artists.AddAsync(artist);
+            await _context.SaveChangesAsync();
+            return artist;
         }
 
-        public Task DeleteArtist(Artist artist)
+        public async Task DeleteArtist(Artist artist)
         {
-            throw new NotImplementedException();
+            _context.Artists.Remove(artist);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteArtist(Guid artistId)
+        public async Task DeleteArtist(Guid artistId)
         {
-            throw new NotImplementedException();
+            _context.Artists.Remove(new Artist { ArtistId = artistId, });
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Artist>> FindArtistsAsync(Expression<Func<Artist, bool>> predicate) => _context.Artists.Where(predicate);
 
-        public Task<Artist> GetArtistAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Artist> GetArtistAsync(Guid id) => Task.FromResult(_context.Artists.Include(a => a.Albums).FirstOrDefault(a => a.ArtistId == id));
 
-        public Task SaveArtistAsync(Artist artist)
+        public async Task SaveArtistAsync(Artist artist)
         {
-            throw new NotImplementedException();
+            var dbArtist = _context.Artists.FirstOrDefault(a => a.ArtistId == artist.ArtistId);
+            dbArtist.Name = artist.Name;
+            await _context.SaveChangesAsync();
         }
     }
 
@@ -50,7 +54,7 @@ namespace rock_app.Services
         Task<IEnumerable<Artist>> GetArtistsAsync();
         Task<Artist> GetArtistAsync(Guid id);
         Task<IEnumerable<Artist>> FindArtistsAsync(Expression<Func<Artist, bool>> predicate);
-        Task CreateArtistAsync(Artist artist);
+        Task<Artist> CreateArtistAsync(Artist artist);
         Task SaveArtistAsync(Artist artist);
         Task DeleteArtist(Artist artist);
         Task DeleteArtist(Guid artistId);

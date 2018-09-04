@@ -9,39 +9,34 @@ using rock_app.Services;
 namespace rock_app.Controllers
 {
     [Route("api/[controller]")]
-    public class ArtistController : Controller
+    public class ArtistsController : Controller
     {
         private readonly IArtistService _artistService;
 
-        public ArtistController(IArtistService artistService)
+        public ArtistsController(IArtistService artistService)
         {
             _artistService = artistService;
         }
 
-        // GET api/values
         [HttpGet]
         public async Task<IEnumerable<Artist>> Get() => await _artistService.GetArtistsAsync();
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public Task<Artist> Get(Guid id) => _artistService.GetArtistAsync(id);
+        public async Task<ActionResult> Get(Guid id)
+        {
+            var artist = await _artistService.GetArtistAsync(id);
+            if (artist == null)
+                return NotFound();
+            return Ok(artist);
+        } 
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
+        public async Task<ActionResult> Post([FromBody]Artist artist) => Ok(await _artistService.CreateArtistAsync(artist));
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        public async Task Put(int id, [FromBody]Artist artist) => await _artistService.SaveArtistAsync(artist);
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        public async Task Delete(Guid id) => await _artistService.DeleteArtist(id);
     }
 }
