@@ -25,8 +25,7 @@ namespace rock_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IArtistService, ArtistService>();
-            services.AddTransient<IDataSeedService, DataSeedService>();
+            RegisterServices(services);
 
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -35,10 +34,28 @@ namespace rock_app
                     options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
                 });
 
-            services.AddDbContext<RockAppContext>(options =>
+            services.AddDbContext<RockAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+        }
+
+        private void RegisterServices(IServiceCollection services)
+        {
+            var importType = Configuration["ImportOptions:ImportType"];
+            switch (importType)
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+                case "ExternalServer":
+                    services.AddTransient<IDataImportService, ExternalDataImportService>();
+                    services.AddTransient<DataImportService>();
+                    break;
+
+                case "UserSupplied":
+                    services.AddTransient<IDataImportService, DataImportService>();
+                break;
+
+                default:
+                    throw new NotSupportedException($"configuration value '{importType}' for ImportOptions:ImportType is not supported");
+            }
+            services.AddTransient<IArtistService, ArtistService>();
+            services.AddTransient<ImportFilterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +68,7 @@ namespace rock_app
             }
 
             app.UseMvc();
+            app.UseStaticFiles();
             await MigrateDatabase(app);
         }
 

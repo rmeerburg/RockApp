@@ -11,17 +11,17 @@ namespace rock_app.Controllers
     [Route("api/manage")]
     public class DataManagementController : Controller
     {
-        private readonly IDataSeedService _dataSeedService;
+        private readonly IDataImportService _dataImportService;
 
-        public DataManagementController(IDataSeedService dataSeedService)
+        public DataManagementController(IDataImportService dataSeedService)
         {
-            _dataSeedService = dataSeedService;
+            _dataImportService = dataSeedService;
         }
 
         [HttpPost("artists")]
-        public Task ImportArtists([FromBody] IEnumerable<Artist> artists) => _dataSeedService.ImportArtists(artists);
+        public async Task<IActionResult> ImportArtists([FromBody] IEnumerable<Artist> artists) => Ok(await _dataImportService.ImportArtists(artists));
 
         [HttpPost("songs")]
-        public Task ImportSongs([FromBody] IEnumerable<ImportSong> songs) => _dataSeedService.ImportSongs(songs);
+        public async Task<IActionResult> ImportSongs([FromBody] IEnumerable<ImportSong> songs) => Ok(await _dataImportService.ImportSongs(songs));
     }
 }
