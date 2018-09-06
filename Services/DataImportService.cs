@@ -8,6 +8,9 @@ using rock_app.Models;
 
 namespace rock_app.Services
 {
+    /// <summary>  
+    ///     Imports artists or songs supplied in json format into the database
+    /// </summary>  
     public class DataImportService : IDataImportService
     {
         private readonly RockAppContext _context;

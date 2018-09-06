@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using rock_app.Services;
+using ZNetCS.AspNetCore.Authentication.Basic;
+using ZNetCS.AspNetCore.Authentication.Basic.Events;
 
 namespace rock_app
 {
@@ -26,6 +29,7 @@ namespace rock_app
         public void ConfigureServices(IServiceCollection services)
         {
             RegisterServices(services);
+            SetupBasicAuth(services);
 
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -58,6 +62,26 @@ namespace rock_app
             services.AddTransient<ImportFilterService>();
         }
 
+        private void SetupBasicAuth(IServiceCollection services)
+        {
+            services.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
+                .AddBasicAuthentication(options => {
+                    options.Realm = "rock_app";
+                    options.Events = new BasicAuthenticationEvents
+                    {
+                        OnValidatePrincipal = context =>
+                        {
+                            if (context.UserName == "rockstars")
+                                context.Principal = new GenericPrincipal(new GenericIdentity(context.UserName), new string[] {});
+                            else 
+                                context.AuthenticationFailMessage = "Authentication failed."; 
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -67,6 +91,7 @@ namespace rock_app
                 app.UseDatabaseErrorPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc();
             app.UseStaticFiles();
             await MigrateDatabase(app);

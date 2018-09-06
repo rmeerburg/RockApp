@@ -10,6 +10,9 @@ using rock_app.Models;
 
 namespace rock_app.Services
 {
+    /// <summary>  
+    ///     Imports song/artist data from an external host
+    /// </summary>  
     public class ExternalDataImportService : IDataImportService
     {
         private readonly IDataImportService _importService;

@@ -4,6 +4,9 @@ using rock_app.Models;
 
 namespace rock_app.Services
 {
+    /// <summary>  
+    ///     Decides which artists and songs should be imported
+    /// </summary> 
     public class ImportFilterService
     {
         public bool ShouldImport(ImportSong song) => song.Genre.ToLowerInvariant().Contains("metal");

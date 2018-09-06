@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using rock_app.Models;
 using rock_app.Services;
 
 namespace rock_app.Controllers
 {
+    [Authorize]
     [Route("api/manage")]
     public class DataManagementController : Controller
     {
