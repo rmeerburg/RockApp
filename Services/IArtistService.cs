@@ -13,9 +13,8 @@ namespace rock_app.Services
     {
         Task<IEnumerable<Artist>> GetArtistsAsync();
         Task<Artist> GetArtistAsync(Guid id);
-        Task<IEnumerable<Artist>> FindArtistsAsync(Expression<Func<Artist, bool>> predicate);
         Task<Artist> CreateArtistAsync(Artist artist);
-        Task SaveArtistAsync(Artist artist);
+        Task<Artist> SaveArtistAsync(Artist artist);
         Task DeleteArtist(Artist artist);
         Task DeleteArtist(Guid artistId);
     }

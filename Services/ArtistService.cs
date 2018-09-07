@@ -40,15 +40,13 @@ namespace rock_app.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Artist>> FindArtistsAsync(Expression<Func<Artist, bool>> predicate) => _context.Artists.Where(predicate);
-
         public Task<Artist> GetArtistAsync(Guid id) => Task.FromResult(_context.Artists.Include(a => a.Albums).FirstOrDefault(a => a.ArtistId == id));
 
-        public async Task SaveArtistAsync(Artist artist)
+        public async Task<Artist> SaveArtistAsync(Artist artist)
         {
-            var dbArtist = _context.Artists.FirstOrDefault(a => a.ArtistId == artist.ArtistId);
-            dbArtist.Name = artist.Name;
+            var savedArtist = _context.Artists.Update(artist);
             await _context.SaveChangesAsync();
+            return savedArtist.Entity;
         }
     }
 }
