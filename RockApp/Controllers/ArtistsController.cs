@@ -20,7 +20,7 @@ namespace RockApp.Controllers
         }
 
         [EnableQuery]
-        public IQueryable<Artist> Get() => _artistService.GetAllAsync().AsQueryable();
+        public IQueryable<Artist> Get() => _artistService.GetAll().AsQueryable();
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)

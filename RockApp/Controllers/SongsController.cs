@@ -19,7 +19,7 @@ namespace RockApp.Controllers
         public SongsController(SongService songService) => _songService = songService;
 
         [EnableQuery]
-        public IQueryable<Song> Get() => _songService.GetAllAsync().AsQueryable();
+        public IQueryable<Song> Get() => _songService.GetAll().AsQueryable();
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)

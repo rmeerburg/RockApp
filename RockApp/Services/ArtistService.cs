@@ -19,7 +19,7 @@ namespace RockApp.Services
             : base(context)
         { }
         
-        public override IEnumerable<Artist> GetAllAsync() => DataSet.Include(a => a.Albums);
+        public override IEnumerable<Artist> GetAll() => DataSet.Include(a => a.Albums);
 
         public override async Task Delete(Guid artistId)
         {

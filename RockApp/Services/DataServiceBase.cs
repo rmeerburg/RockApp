@@ -23,7 +23,7 @@ namespace RockApp.Services
 
         protected abstract DbSet<TData> DataSet { get; }
         
-        public virtual IEnumerable<TData> GetAllAsync() => DataSet;
+        public virtual IEnumerable<TData> GetAll() => DataSet;
 
         public virtual Task<TData> GetAsync(TKey id) => DataSet.FirstOrDefaultAsync(d => d.Id.Equals(id));
 
@@ -56,7 +56,7 @@ namespace RockApp.Services
     public interface IDataServiceBase<TData, TKey>
         where TData: class, IIdentifyable<TKey>
     {
-        IEnumerable<TData> GetAllAsync();
+        IEnumerable<TData> GetAll();
         Task<TData> GetAsync(TKey id);
         Task<TData> CreateAsync(TData data);
         Task<TData> SaveAsync(TData data);
