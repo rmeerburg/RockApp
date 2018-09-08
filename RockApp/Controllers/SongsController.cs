@@ -14,9 +14,9 @@ namespace RockApp.Controllers
     [Route("api/[controller]")]
     public class SongsController : Controller
     {
-        private readonly SongService _songService;
+        private readonly ISongService _songService;
 
-        public SongsController(SongService songService) => _songService = songService;
+        public SongsController(ISongService songService) => _songService = songService;
 
         [EnableQuery]
         public IQueryable<Song> Get() => _songService.GetAll().AsQueryable();
