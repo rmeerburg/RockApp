@@ -10,7 +10,7 @@ using RockApp.Services;
 namespace RockApp.Controllers
 {
     [Route("api/[controller]")]
-    public class ArtistsController : Controller
+    public class ArtistsController : EntityController
     {
         private readonly IArtistService _artistService;
 
@@ -35,7 +35,7 @@ namespace RockApp.Controllers
         public async Task<ActionResult> Post([FromBody]Artist artist) => Ok(await _artistService.CreateAsync(artist));
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]Artist artist) => Ok(await _artistService.SaveAsync(artist));
+        public async Task<ActionResult> Put(Guid id, [FromBody]Artist artist) => Ok(await _artistService.SaveAsync(artist));
 
         [HttpDelete("{id}")]
         public async Task Delete(Guid id) => await _artistService.Delete(id);

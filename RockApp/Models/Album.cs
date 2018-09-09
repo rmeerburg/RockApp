@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RockApp.Models
 {
@@ -14,6 +15,7 @@ namespace RockApp.Models
 
         public Guid ArtistId { get; set; }
         public Artist Artist { get; set; }
+        [Required]
         public string Name { get; set; }
         public ICollection<Song> Songs { get; set; }
     }

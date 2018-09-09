@@ -55,10 +55,10 @@ namespace RockApp
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
-
+            app.UseAuthentication();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseOData(GetEdmModel());
 
-            app.UseAuthentication();
             app.UseMvc(options => {
                 // required to support odata queries in controllers
                 options.EnableDependencyInjection();
@@ -102,7 +102,7 @@ namespace RockApp
             services.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
                 .AddBasicAuthentication(options =>
                 {
-                    options.Realm = "RockApp";
+                    options.Realm = "Basic Realm";
                     options.Events = new BasicAuthenticationEvents
                     {
                         OnValidatePrincipal = context =>
